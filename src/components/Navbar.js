@@ -19,23 +19,14 @@ const Navbar = ({ onLogout }) => {
         <div className='menu-icon' onClick={handleClick}>
           <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
         </div>
-        <ul className={click ? 'nav-menu active' : 'nav-menu'}>          
+        <ul className={click ? 'nav-menu active' : 'nav-menu'}>       
           <li className='nav-item'>
             <Link
-              to='/lighthall-challenge-4/invite'
+              to='/lighthall-challenge-4/createdate'
               className='nav-links'
               onClick={closeMobileMenu}
             >
-              Invite
-            </Link>
-          </li>
-          <li className='nav-item'>
-            <Link
-              to='/lighthall-challenge-4/currentdate'
-              className='nav-links'
-              onClick={closeMobileMenu}
-            >
-              Current Date
+              Create Date
             </Link>
           </li>
           <li className='nav-item'>
@@ -44,11 +35,11 @@ const Navbar = ({ onLogout }) => {
               className='nav-links'
               onClick={closeMobileMenu}
             >
-              Date History
+              Meal History
             </Link>
           </li>
           <li className='nav-item1'>
-              UserName      
+              User : UserName      
           </li>
         </ul>
         <Button onLogout={onLogout} />
