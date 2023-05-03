@@ -3,7 +3,7 @@ import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = ({ onLogout }) => {
+const Navbar = ({ onLogout, userName }) => {
   const [click, setClick] = useState(false);
 
   const handleClick = () => setClick(!click);
@@ -39,7 +39,7 @@ const Navbar = ({ onLogout }) => {
             </Link>
           </li>
           <li className='nav-item1'>
-              User : UserName      
+              User Name: { userName }      
           </li>
         </ul>
         <Button onLogout={onLogout} />

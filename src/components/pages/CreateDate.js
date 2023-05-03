@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../App.css';
 import './CreateDate.css';
 
 export default function CreateDate() {
