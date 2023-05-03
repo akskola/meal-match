@@ -3,7 +3,7 @@ import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-function Navbar() {
+const Navbar = ({ onLogout }) => {
   const [click, setClick] = useState(false);
 
   const handleClick = () => setClick(!click);
@@ -12,7 +12,7 @@ function Navbar() {
   return (
     <>
       <nav className='navbar'>
-        <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
+        <Link to='/lighthall-challenge-4/home' className='navbar-logo' onClick={closeMobileMenu}>
           MealMatch
           <i class='fab fa-firstdraft' />
         </Link>
@@ -21,14 +21,14 @@ function Navbar() {
         </div>
         <ul className={click ? 'nav-menu active' : 'nav-menu'}>
           <li className='nav-item'>
-            <Link to='/' className='nav-links' onClick={closeMobileMenu}>
+            <Link to='/lighthall-challenge-4/home' className='nav-links' onClick={closeMobileMenu}>
               Home
             </Link>
           </li>
           
           <li className='nav-item'>
             <Link
-              to='/invite'
+              to='/lighthall-challenge-4/invite'
               className='nav-links'
               onClick={closeMobileMenu}
             >
@@ -37,7 +37,7 @@ function Navbar() {
           </li>
           <li className='nav-item'>
             <Link
-              to='/currentdate'
+              to='/lighthall-challenge-4/currentdate'
               className='nav-links'
               onClick={closeMobileMenu}
             >
@@ -46,24 +46,18 @@ function Navbar() {
           </li>
           <li className='nav-item'>
             <Link
-              to='/history'
+              to='/lighthall-challenge-4/history'
               className='nav-links'
               onClick={closeMobileMenu}
             >
               Date History
             </Link>
           </li>
-          <li>
-            <Link
-              to='/sign-up'
-              className='nav-links-mobile'
-              onClick={closeMobileMenu}
-            >
-              Log Out
-            </Link>
+          <li className='nav-item1'>
+              UserName      
           </li>
         </ul>
-        <Button />
+        <Button onLogout={onLogout} />
       </nav>
     </>
   );
