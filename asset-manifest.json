@@ -1,20 +1,13 @@
 {
   "files": {
-    "main.css": "/lighthall-challenge-4/static/css/main.090807c4.css",
-    "main.js": "/lighthall-challenge-4/static/js/main.2fe54a3b.js",
-    "static/media/img-2.jpg": "/lighthall-challenge-4/static/media/img-2.bb238fc1bea8ae2474d2.jpg",
-    "static/media/img-4.jpg": "/lighthall-challenge-4/static/media/img-4.a31875b76d39f6458a6e.jpg",
-    "static/media/img-6.jpg": "/lighthall-challenge-4/static/media/img-6.047226b0f6080d5b242c.jpg",
-    "static/media/img-3.jpg": "/lighthall-challenge-4/static/media/img-3.6d683c0ee6824af7961a.jpg",
-    "static/media/img-5.jpg": "/lighthall-challenge-4/static/media/img-5.7fadbe1bc2b9569a1941.jpg",
-    "static/media/img-1.jpg": "/lighthall-challenge-4/static/media/img-1.53f4843759ebec256cb9.jpg",
-    "static/media/img-7.jpg": "/lighthall-challenge-4/static/media/img-7.dfeef5257053ba651d89.jpg",
+    "main.css": "/lighthall-challenge-4/static/css/main.9721375d.css",
+    "main.js": "/lighthall-challenge-4/static/js/main.a753d388.js",
     "index.html": "/lighthall-challenge-4/index.html",
-    "main.090807c4.css.map": "/lighthall-challenge-4/static/css/main.090807c4.css.map",
-    "main.2fe54a3b.js.map": "/lighthall-challenge-4/static/js/main.2fe54a3b.js.map"
+    "main.9721375d.css.map": "/lighthall-challenge-4/static/css/main.9721375d.css.map",
+    "main.a753d388.js.map": "/lighthall-challenge-4/static/js/main.a753d388.js.map"
   },
   "entrypoints": [
-    "static/css/main.090807c4.css",
-    "static/js/main.2fe54a3b.js"
+    "static/css/main.9721375d.css",
+    "static/js/main.a753d388.js"
   ]
 }
