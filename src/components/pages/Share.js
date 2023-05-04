@@ -17,7 +17,7 @@ function Share({ setShowShare, linkID }) {
           &times;
         </span>
         <div className="share-header">
-          <h2>Know what your partner wants!</h2>
+          <h2>Enter your partner's choices OR Share the link!</h2>
         </div>
         <div className="link-container">
           

@@ -25,14 +25,14 @@ export const firestore = initializeFirestore(app, {
   useFetchStreams: false,
 });
 
-export const addUser = async () => {
+export const addUser = async (restaurants) => {
     const collectionRef = collection(firestore, "Invites");
     const lastDoc = await getDocs(collectionRef);
     const lastDocId = lastDoc.docs[lastDoc.docs.length - 1].id;
     
     const nextDocId = parseInt(lastDocId) + 1;
     const docRef = doc(firestore, "Invites", nextDocId.toString());
-    const data = {};
+    const data = {restaurants};
     
     try {
       const docSnapshot = await getDoc(docRef);

@@ -21,7 +21,7 @@ export default function CreateDate() {
   };
 
   const handleShare = async () => {
-    const newID = await addUser();
+    const newID = await addUser(restaurants);
     setSessionID(newID);
     setShowShare(true);
   };
