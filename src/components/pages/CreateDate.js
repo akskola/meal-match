@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import './CreateDate.css';
+import "./CreateDate.css";
 
-const CreateDate = () => {
+export default function CreateDate() {
+  const [restaurants, setRestaurants] = useState([]);
+  const [error, setError] = useState(null);
+  const [desirabilities, setDesirabilities] = useState({});
+  const [location, setLocation] = useState("")
   const [gradientPosition, setGradientPosition] = useState({ x: 50, y: 50 });
 
   const handleMouseMove = (e) => {
@@ -11,45 +15,208 @@ const CreateDate = () => {
     setGradientPosition({ x: xPos, y: yPos });
   };
 
+  const handleShowRestaurants = async () => {
+    const cuisine1 = document.getElementById("cuisine1").value.toLowerCase();
+    const cuisine2 = document.getElementById("cuisine2").value.toLowerCase();
+    setRestaurants([])
+    try {
+        const apiKey =
+          "9SCo-9aeibBhnZOYBoAefUp7cZbBnXAaJ2nfBvLdrJspIhy4Onwv_BQ-me5oJkaVf6I6uHiDD5K1Z-6A3M2cpnIHOLlsuEogaKxCOR7Wgv5NUWD_BYXhZ6aEtLJSZHYx";
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+        const url1 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+","+cuisine2+"&location="+location;
+        const url2 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+"&location="+location;
+        const url3 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine2+"&location="+location;
+        
+        const response1 = await fetch(proxyUrl + url1, {
+          headers: {
+            Authorization: `Bearer ${apiKey}`
+          }
+        });
+        const data1 = await response1.json();
+        
+        const response2 = await fetch(proxyUrl + url2, {
+          headers: {
+            Authorization: `Bearer ${apiKey}`
+          }
+        });
+        const data2 = await response2.json();
+
+        const response3 = await fetch(proxyUrl + url3, {
+          headers: {
+            Authorization: `Bearer ${apiKey}`
+          }
+        });
+        const data3 = await response3.json();
+
+        // Filter results to only include restaurants with both cuisine categories
+        const cuisine1and2 = data1.businesses
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 3);
+          
+            const cuisine1Restaurants = data2.businesses
+            .sort((a, b) => b.rating - a.rating)
+            .filter(business => !cuisine1and2.includes(business))
+            .slice(0, 1);
+        
+            const cuisine2Restaurants = data3.businesses
+        .sort((a, b) => b.rating - a.rating)
+        .filter(business => !cuisine1and2.includes(business))
+        .slice(0, 1);
+
+        setRestaurants([...cuisine1and2, ...cuisine1Restaurants, ...cuisine2Restaurants]);
+        console.log("Else c1: ", cuisine1Restaurants);
+        console.log("Else c2: ", cuisine2Restaurants);
+    } catch (err) {
+      setError("");
+    }
+  };
+
+  const handleRateRestaurant = (id, rating) => {
+    const updatedRestaurants = [...restaurants];
+    const index = updatedRestaurants.findIndex((r) => r.id === id);
+    updatedRestaurants[index].rating = rating;
+    setRestaurants(updatedRestaurants);
+  };
+
+  const handleDesirability = (id, desirability) => {
+    // handleRateDesirability(id, desirability);
+    setDesirabilities({ ...desirabilities, [id]: desirability });
+    console.log(desirabilities);
+  };
+
   return (
-    <div className='create-date'>
-      <div className='create-date-container' onMouseMove={handleMouseMove}>
+    <div  onMouseMove={handleMouseMove}>
       <div
               className="background"
               style={{
                 background: `linear-gradient(90deg, rgba(24, 136, 255, 0.1) 0%, rgba(24, 136, 255, 0.1) 50%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 100%), radial-gradient(circle at ${gradientPosition.x}% ${gradientPosition.y}%, #1888ff, #000)`,
               }}
             ></div>
-        <div className='create-date-container-title'>Enter your choices</div>
-        <div className='create-date-container-inputs'>
-          <div className='create-date-input-container'>
-            <label htmlFor='cuisine1'>Cuisine</label>
-            <input type='text' id='cuisine1' name='cuisine1' placeholder='Enter cuisine' />
+      <div className="create-date">
+      
+        <div className="create-date-container" >
+          <div className="create-date-container-title">Enter your choices</div>
+          <div className="create-date-container-inputs">
+            <div className="create-date-input-container">
+              <label htmlFor="cuisine1">Cuisine</label>
+              <input
+                type="text"
+                id="cuisine1"
+                name="cuisine1"
+                placeholder="Enter cuisine"
+              />
+            </div>
+            <div className="create-date-input-container">
+              <label htmlFor="dish1">Location</label>
+              <input
+                type="text"
+                value={location} onChange={(e) => setLocation(e.target.value)}
+                placeholder="Enter your location"
+              />
+            </div>
           </div>
-          <div className='create-date-input-container'>
-            <label htmlFor='dish1'>Dish</label>
-            <input type='text' id='dish1' name='dish1' placeholder='Enter dish' />
+        </div>
+        <div className="create-date-container">
+          <div className="create-date-container-title">
+            Enter your partner's choices
+          </div>
+          <div className="create-date-container-inputs">
+            <div className="create-date-input-container">
+              <label htmlFor="cuisine2">Cuisine</label>
+              <input
+                type="text"
+                id="cuisine2"
+                name="cuisine2"
+                placeholder="Enter cuisine"
+              />
+            </div>
+            <div className="create-date-input-container">
+              <label htmlFor="dish2">Location</label>
+              <input
+                type="text"
+                value={location} onChange={(e) => setLocation(e.target.value)}
+                placeholder="Enter your location"
+              />
+            </div>
           </div>
         </div>
       </div>
-      <div className='create-date-container'>
-        <div className='create-date-container-title'>Enter your partner's choices</div>
-        <div className='create-date-container-inputs'>
-          <div className='create-date-input-container'>
-            <label htmlFor='cuisine2'>Cuisine</label>
-            <input type='text' id='cuisine2' name='cuisine2' placeholder='Enter cuisine' />
-          </div>
-          <div className='create-date-input-container'>
-            <label htmlFor='dish2'>Dish</label>
-            <input type='text' id='dish2' name='dish2' placeholder='Enter dish' />
-          </div>
+      <div className="create-btn-container">
+              <button className="create-btn" onClick={handleShowRestaurants}>
+                Show Restaurants
+              </button>
+            </div>
+      {error && <p>{error}</p>}
+      {restaurants.length > 0 && (
+        <div className="restaurants-container">
+          <h2>Available Restaurants</h2>
+          <ul className="all-restaurants">
+            {restaurants.map((restaurant) => (
+              <li key={restaurant.id} className="restaurant-container">
+                <div className="image-container">
+                  <img src={restaurant.image_url} alt={restaurant.name} />
+                </div>
+                <div className="restaurant-details">
+                  <h3>{restaurant.name}</h3>
+                  <p>
+                    <strong>Cuisine:</strong>{" "}
+                    {restaurant.categories
+                      .map((category) => category.title)
+                      .join(", ")}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {restaurant.location.address1},{" "}
+                    {restaurant.location.city}, {restaurant.location.state},{" "}
+                    {restaurant.location.zip_code}
+                  </p>
+                  <p>
+                    <strong>Rating:</strong> {restaurant.rating}
+                  </p>
+                  <p>
+                    <strong>Reviews:</strong> {restaurant.review_count}
+                  </p>
+                  <div className="rating-container">
+                    <p>Rate this restaurant:</p>
+                    {[...Array(5)].map((_, index) => (
+                      <button
+                        key={index}
+                        className={`rating-star ${
+                          index < restaurant.rating ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          handleRateRestaurant(restaurant.id, index + 1)
+                        }
+                      >
+                        &#9733;
+                      </button>
+                    ))}
+                  </div>
+                  <div className="desirability-container">
+                    <p>How badly do you want to eat here?</p>
+                    <div className="desirability-buttons">
+                      {[...Array(10)].map((_, index) => (
+                        <button
+                          key={index}
+                          className={`desirability-level ${
+                            index + 1 <= desirabilities[restaurant.id]
+                              ? "active"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleDesirability(restaurant.id, index + 1)
+                          }
+                        >
+                          {index + 1}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-      <div className='create-btn-container'>
-        <button className='create-btn'>Show Restaurants</button>
-      </div>
+      )}
     </div>
   );
 }
-
-export default CreateDate;
