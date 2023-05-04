@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import "./CreateDate.css";
+import Share from "./Share";
+import { addUser } from "./firebase";
 
 export default function CreateDate() {
   const [restaurants, setRestaurants] = useState([]);
   const [error, setError] = useState(null);
   const [desirabilities, setDesirabilities] = useState({});
   const [location, setLocation] = useState("")
+  const [showButton, setShowButton] = useState(false)
   const [gradientPosition, setGradientPosition] = useState({ x: 50, y: 50 });
+  const [showShare, setShowShare] = useState(false);
+  const [sessionID, setSessionID] = useState("")
 
   const handleMouseMove = (e) => {
     const { clientX, clientY } = e;
@@ -15,17 +20,25 @@ export default function CreateDate() {
     setGradientPosition({ x: xPos, y: yPos });
   };
 
+  const handleShare = async () => {
+    const newID = await addUser();
+    setSessionID(newID);
+    setShowShare(true);
+  };
+
   const handleShowRestaurants = async () => {
     const cuisine1 = document.getElementById("cuisine1").value.toLowerCase();
     const cuisine2 = document.getElementById("cuisine2").value.toLowerCase();
     setRestaurants([])
+    setShowButton(false)
     try {
         const apiKey =
           "9SCo-9aeibBhnZOYBoAefUp7cZbBnXAaJ2nfBvLdrJspIhy4Onwv_BQ-me5oJkaVf6I6uHiDD5K1Z-6A3M2cpnIHOLlsuEogaKxCOR7Wgv5NUWD_BYXhZ6aEtLJSZHYx";
         const proxyUrl = "https://cors-anywhere.herokuapp.com/";
         const url1 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+","+cuisine2+"&location="+location;
-        const url2 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+"&location="+location;
-        const url3 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine2+"&location="+location;
+        
+        //const url2 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+"&location="+location;
+        //const url3 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine2+"&location="+location;
         
         const response1 = await fetch(proxyUrl + url1, {
           headers: {
@@ -34,7 +47,7 @@ export default function CreateDate() {
         });
         const data1 = await response1.json();
         
-        const response2 = await fetch(proxyUrl + url2, {
+        /*const response2 = await fetch(proxyUrl + url2, {
           headers: {
             Authorization: `Bearer ${apiKey}`
           }
@@ -46,36 +59,32 @@ export default function CreateDate() {
             Authorization: `Bearer ${apiKey}`
           }
         });
-        const data3 = await response3.json();
+        const data3 = await response3.json();*/
 
         // Filter results to only include restaurants with both cuisine categories
         const cuisine1and2 = data1.businesses
-            .sort((a, b) => b.rating - a.rating)
-            .slice(0, 3);
+        .slice(0, 5);
           
-            const cuisine1Restaurants = data2.businesses
+            /*const cuisine1Restaurants = data2.businesses
             .sort((a, b) => b.rating - a.rating)
             .filter(business => !cuisine1and2.includes(business))
-            .slice(0, 1);
+            .slice(3, 4);
         
             const cuisine2Restaurants = data3.businesses
-        .sort((a, b) => b.rating - a.rating)
-        .filter(business => !cuisine1and2.includes(business))
-        .slice(0, 1);
+            .filter(business => !cuisine1and2.includes(business))
+            .sort((a, b) => b.rating - a.rating)
+            .slice(3, 4);
 
         setRestaurants([...cuisine1and2, ...cuisine1Restaurants, ...cuisine2Restaurants]);
         console.log("Else c1: ", cuisine1Restaurants);
-        console.log("Else c2: ", cuisine2Restaurants);
+        console.log("Else c2: ", cuisine2Restaurants);*/
+        setRestaurants([...cuisine1and2])
+        setShowButton(true)
+        setError("")
+        
     } catch (err) {
-      setError("");
+      setError("Error Loading Restaurants. Enter appropriate cuisines/location!");
     }
-  };
-
-  const handleRateRestaurant = (id, rating) => {
-    const updatedRestaurants = [...restaurants];
-    const index = updatedRestaurants.findIndex((r) => r.id === id);
-    updatedRestaurants[index].rating = rating;
-    setRestaurants(updatedRestaurants);
   };
 
   const handleDesirability = (id, desirability) => {
@@ -175,22 +184,10 @@ export default function CreateDate() {
                   <p>
                     <strong>Reviews:</strong> {restaurant.review_count}
                   </p>
-                  <div className="rating-container">
-                    <p>Rate this restaurant:</p>
-                    {[...Array(5)].map((_, index) => (
-                      <button
-                        key={index}
-                        className={`rating-star ${
-                          index < restaurant.rating ? "active" : ""
-                        }`}
-                        onClick={() =>
-                          handleRateRestaurant(restaurant.id, index + 1)
-                        }
-                      >
-                        &#9733;
-                      </button>
-                    ))}
-                  </div>
+                  <p>
+                    <strong>Website:</strong>  <div className="generated-link"><a href={"https://www.yelp.com/biz/" + restaurant.alias} target="_blank" rel="noreferrer">{"https://www.yelp.com/biz/" + restaurant.alias}</a></div>
+                  </p>
+                  
                   <div className="desirability-container">
                     <p>How badly do you want to eat here?</p>
                     <div className="desirability-buttons">
@@ -211,12 +208,20 @@ export default function CreateDate() {
                       ))}
                     </div>
                   </div>
+                  
                 </div>
+                
               </li>
             ))}
+            {showButton && <div className="create-btn-container">
+              <button className="create-btn" onClick={() => handleShare()}>
+                Share
+              </button>
+            </div>}
           </ul>
         </div>
       )}
+      {showShare && <Share setShowShare={setShowShare} linkID={sessionID} />}
     </div>
   );
 }

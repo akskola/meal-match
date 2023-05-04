@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import CreateDate from "./components/pages/CreateDate";
 import History from "./components/pages/History";
+import SingleSession from "./components/pages/SingleSession"
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,6 +36,20 @@ const App = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+
+  const isSingleSessionRoute = window.location.pathname.includes(
+    "/singlesession/"
+  );
+
+  if (isSingleSessionRoute) {
+    return (
+      <Router>
+        <Routes>
+        <Route path="/lighthall-challenge-4/singlesession/:sessionID" element={<SingleSession />} />
+            </Routes>
+      </Router>
+    );
+  }
 
   return (
     <Router>
