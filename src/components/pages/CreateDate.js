@@ -7,11 +7,11 @@ export default function CreateDate() {
   const [desirabilities, setDesirabilities] = useState({});
 
   const handleShowRestaurants = async () => {
-    const cuisine1 = document.getElementById("cuisine1").value;
-    const dish1 = document.getElementById("dish1").value;
-    const cuisine2 = document.getElementById("cuisine2").value;
-    const dish2 = document.getElementById("dish2").value;
-    const location = document.getElementById("location").value;
+    const cuisine1 = document.getElementById("cuisine1").value.toLowerCase();
+    const dish1 = document.getElementById("dish1").value.toLowerCase();
+    const cuisine2 = document.getElementById("cuisine2").value.toLowerCase();
+    const dish2 = document.getElementById("dish2").value.toLowerCase();
+    const location = document.getElementById("location").value.toLowerCase();
 
     try {
       const apiKey =
