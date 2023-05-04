@@ -12,7 +12,7 @@ const Navbar = ({ onLogout, userName }) => {
   return (
     <>
       <nav className='navbar'>
-        <Link to='/lighthall-challenge-4/home' className='navbar-logo' onClick={closeMobileMenu}>
+        <Link to='home' className='navbar-logo' onClick={closeMobileMenu}>
           MealMatch
           <i class='fab fa-firstdraft' />
         </Link>
@@ -22,7 +22,7 @@ const Navbar = ({ onLogout, userName }) => {
         <ul className={click ? 'nav-menu active' : 'nav-menu'}>       
           <li className='nav-item'>
             <Link
-              to='/lighthall-challenge-4/createdate'
+              to='/createdate'
               className='nav-links'
               onClick={closeMobileMenu}
             >
@@ -31,7 +31,7 @@ const Navbar = ({ onLogout, userName }) => {
           </li>
           <li className='nav-item'>
             <Link
-              to='/lighthall-challenge-4/history'
+              to='/history'
               className='nav-links'
               onClick={closeMobileMenu}
             >

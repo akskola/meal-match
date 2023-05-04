@@ -5,7 +5,7 @@ function Share({ setShowShare, linkID }) {
   const [link, setLink] = useState('');
 
   const generateLink = () => {
-    const newLink = `https://nossherlock.github.io/lighthall-challenge-4/singlesession/${linkID}`;
+    const newLink = `https://nossherlock.github.io/lighthall-challenge-4/#/singlesession/${linkID}`;
     setLink(newLink);
     navigator.clipboard.writeText(newLink);
   };
@@ -17,7 +17,7 @@ function Share({ setShowShare, linkID }) {
           &times;
         </span>
         <div className="share-header">
-          <h2>Know what your partner thinks!</h2>
+          <h2>Know what your partner wants!</h2>
         </div>
         <div className="link-container">
           

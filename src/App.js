@@ -3,7 +3,6 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 import {
   Link,
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -37,35 +36,22 @@ const App = () => {
     setIsLoggedIn(false);
   };
 
-  const isSingleSessionRoute = window.location.pathname.includes(
-    "/singlesession/"
-  );
-
-  if (isSingleSessionRoute) {
-    return (
-      <Router>
-        <Routes>
-        <Route path="/lighthall-challenge-4/singlesession/:sessionID" element={<SingleSession />} />
-            </Routes>
-      </Router>
-    );
-  }
 
   return (
-    <Router>
+    <>
       {isLoggedIn ? (
         <>
           <Navbar onLogout={handleLogout} userName={name}/>
           <Routes>
-            <Route path="/" element={<Navigate to="/lighthall-challenge-4/createdate" />} />
-            <Route path="/lighthall-challenge-4/createdate" element={<CreateDate />} />
-            <Route path="/lighthall-challenge-4/history" element={<History />} />
+            <Route path="/" element={<Navigate to="/createdate" />} />
+            <Route path="/createdate" element={<CreateDate />} />
+            <Route path="/history" element={<History />} />
           </Routes>
         </>
       ) : (
       <>
         <nav className='navbar'>
-          <Link to='/lighthall-challenge-4/' className='navbar-logo'>
+          <Link to='/' className='navbar-logo'>
             MealMatch
             <i class='fab fa-firstdraft' />
           </Link>
@@ -73,6 +59,13 @@ const App = () => {
             <i className={'fas fa-times'} />
           </div> 
         </nav>
+        <>{window.location.href.indexOf("singlesession") > -1 ? (
+        <>
+          <Routes>
+        <Route path="/singlesession/:sessionID" element={<SingleSession />} />
+      </Routes>
+        </>
+      ) : (
         <div className="login-screen">
           <div className='create-date-container' onMouseMove={handleMouseMove}>
           <div
@@ -90,15 +83,21 @@ const App = () => {
             <input type='text' id='cuisine1' name='cuisine1' value={name} onChange={(e) => setName(e.target.value) } required/>
           </div>
           <br /> {/* New line added here */}
-          <Link to='/lighthall-challenge-4/createdate'>
+          <Link to='/createdate'>
             <button onClick={handleLogin} className='login-button'>Log In</button>
           </Link>
         </div>
       </div>
       </div>
+      )}
+        
+      </>
       </>
     )}
-    </Router>
+    
+    
+    </>
+    
   );
 }
 

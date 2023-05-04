@@ -8,7 +8,7 @@ export const Button = ({ onLogout }) => {
   };
 
   return (
-    <Link to='/lighthall-challenge-4/'>
+    <Link to='/'>
       <button className='btn' onClick={handleLogout}>Log Out</button>
     </Link>
   );
