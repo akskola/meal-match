@@ -104,7 +104,7 @@
   background-color: #ddd;
   display: flex;
   width: 100%;
-  max-width: 750px;
+  max-width: 760px;
   margin-bottom: 20px;
   padding: 20px;
   border: 1px solid #000000;
@@ -194,6 +194,7 @@
 img {
   width: 150px;
   height: 150px;
+  border-radius: 6px;
 }
 
 .restaurant-details {
@@ -219,6 +220,7 @@ img {
 h2 {
   padding: 10px;
   background-color: white;
+  border-radius: 6px;
 }
 
 

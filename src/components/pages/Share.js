@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import './Share.css';
+import React, { useState } from "react";
+import "./Share.css";
 
 function Share({ setShowShare, linkID }) {
-  const [link, setLink] = useState('');
+  const [link, setLink] = useState("");
 
   const generateLink = () => {
-    const newLink = `https://nossherlock.github.io/lighthall-challenge-4/#/singlesession/${linkID}`;
+    const newLink = `http://localhost:3000/lighthall-challenge-4/#/singlesession/${linkID}`;
     setLink(newLink);
     navigator.clipboard.writeText(newLink);
   };
@@ -20,13 +20,14 @@ function Share({ setShowShare, linkID }) {
           <h2>Enter your partner's choices OR Share the link!</h2>
         </div>
         <div className="link-container">
-          
           {link && (
             <div className="generated-link-container">
               <label>Share Link:</label>
-              <div className="generated-link"><a href={link} target="_blank" rel="noreferrer">{link}</a>
-
-</div>
+              <div className="generated-link">
+                <a href={link} target="_blank" rel="noreferrer">
+                  {link}
+                </a>
+              </div>
             </div>
           )}
           <br /> {/* New line added here */}
