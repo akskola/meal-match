@@ -21,12 +21,13 @@ export default function CreateDate() {
   };
 
   const handleShare = async () => {
-    const newID = await addUser(restaurants);
+    const newID = await addUser(restaurants,desirabilities);
     setSessionID(newID);
     setShowShare(true);
   };
 
   const handleShowRestaurants = async () => {
+    desirabilities.length = 0;
     const cuisine1 = document.getElementById("cuisine1").value.toLowerCase();
     const cuisine2 = document.getElementById("cuisine2").value.toLowerCase();
     setRestaurants([])
