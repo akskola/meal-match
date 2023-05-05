@@ -3,21 +3,29 @@ import "./Share.css";
 
 function Share({ setShowShare, linkID }) {
   const [link, setLink] = useState("");
+  const [showCopy, setShowCopy] = useState(false);
 
   const generateLink = () => {
-    const newLink = `http://localhost:3000/lighthall-challenge-4/#/singlesession/${linkID}`;
+    const newLink = `http://nossherlock.github.io/lighthall-challenge-4/#/singlesession/${linkID}`;
     setLink(newLink);
     navigator.clipboard.writeText(newLink);
+    setShowCopy(true);
   };
 
   return (
     <div className="modal">
       <div className="modal-content">
-        <span className="close" onClick={() => setShowShare(false)}>
+        <span
+          className="close"
+          onClick={() => {
+            setShowShare(false);
+            setShowCopy(false);
+          }}
+        >
           &times;
         </span>
         <div className="share-header">
-          <h2>Enter your partner's choices OR Share the link!</h2>
+          <h2>Share the below link with you partner to get their choices</h2>
         </div>
         <div className="link-container">
           {link && (
@@ -33,7 +41,7 @@ function Share({ setShowShare, linkID }) {
           <br /> {/* New line added here */}
         </div>
         <button className="generate-link-btn" onClick={generateLink}>
-          Generate & Copy Link
+          {showCopy ? "Copy to Clipboard" : "Generate Link"}
         </button>
       </div>
     </div>

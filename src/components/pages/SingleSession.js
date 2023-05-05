@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
 import "./CreateDate.css";
-import { getInvite } from "./firebase";
+import { getInvite, addSelectedRestaurant } from "./firebase";
 import { useParams } from "react-router-dom";
+import Modal from "react-modal";
 import "./SingleSession.css";
 
 export default function SingleSession() {
   const { sessionID } = useParams();
+  const [userName, setUserName] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [desirabilities1, setDesirabilities1] = useState({});
   const [desirabilities2, setDesirabilities2] = useState({});
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [gradientPosition, setGradientPosition] = useState({ x: 50, y: 50 });
 
   useEffect(() => {
     const fetchInviteData = async () => {
       const inviteData = await getInvite(sessionID);
       if (inviteData) {
+        setUserName(inviteData.userName);
         setRestaurants(inviteData.restaurants);
         setDesirabilities1(inviteData.desirabilities);
       }
@@ -35,6 +40,29 @@ export default function SingleSession() {
     console.log(desirabilities2);
   };
 
+  // const handleConfirmChoice = async () => {
+  //   addSelectedRestaurant(userName, selectedRestaurant)
+  //     .then(() => {
+  //       alert("Selected restaurant has been added to"+userName+"'s list successfully!");
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error adding selected restaurant:", error);
+  //     });
+  //     setShowPopup(false);
+  // };
+
+  const handleConfirmChoice = async () => {
+    try {
+      const timestamp = new Date();
+      await addSelectedRestaurant(userName, selectedRestaurant, timestamp);
+      setShowPopup(false);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.log("Error adding selected restaurant:", error);
+    }
+  };
+  
+
   const findMealMatch = () => {
     const bestRestaurant = restaurants.reduce(
       (best, restaurant) => {
@@ -51,7 +79,7 @@ export default function SingleSession() {
       },
       { restaurant: null, score: 0 }
     );
-
+    setShowPopup(true);
     setSelectedRestaurant(bestRestaurant);
   };
 
@@ -65,13 +93,19 @@ export default function SingleSession() {
       ></div>
       {restaurants.length > 0 && (
         <div className="restaurants-container">
-          <h2>Available Restaurants</h2>
+          <h2>Rate the below Restaurants</h2>
           <ul className="all-restaurants">
             {restaurants.map((restaurant) => (
               <li key={restaurant.id} className="restaurant-container">
-                <div className="image-container">
-                  <img src={restaurant.image_url} alt={restaurant.name} />
-                </div>
+                <a
+                  href={"https://www.yelp.com/biz/" + restaurant.alias}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div className="image-container">
+                    <img src={restaurant.image_url} alt={restaurant.name} />
+                  </div>
+                </a>
                 <div className="restaurant-details">
                   <h3>{restaurant.name}</h3>
                   <p>
@@ -91,7 +125,7 @@ export default function SingleSession() {
                   <p>
                     <strong>Reviews:</strong> {restaurant.review_count}
                   </p>
-                  <p>
+                  {/* <p>
                     <strong>Website:</strong>{" "}
                     <div className="generated-link">
                       <a
@@ -102,7 +136,7 @@ export default function SingleSession() {
                         {"https://www.yelp.com/biz/" + restaurant.alias}
                       </a>
                     </div>
-                  </p>
+                  </p> */}
 
                   <div className="desirability-container">
                     <p>How badly do you want to eat here?</p>
@@ -141,18 +175,25 @@ export default function SingleSession() {
         </button>
       </div>
       <div>Here: {sessionID}</div>
-      {selectedRestaurant && (
+      {selectedRestaurant && showPopup && (
         <div className="popup">
           {selectedRestaurant.restaurant ? (
             <div>
               <h2>Most Matched Restaurant:</h2>
               <div className="restaurant-details">
-                <div className="restaurant-image">
-                  <img
-                    src={selectedRestaurant.restaurant.image_url}
-                    alt={selectedRestaurant.restaurant.name}
-                  />
-                </div>
+                <a
+                  href={selectedRestaurant.restaurant.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div className="restaurant-image">
+                    <img
+                      src={selectedRestaurant.restaurant.image_url}
+                      alt={selectedRestaurant.restaurant.name}
+                    />
+                  </div>
+                </a>
+
                 <div className="restaurant-info">
                   <h3>{selectedRestaurant.restaurant.name}</h3>
                   <div className="restaurant-ratings">
@@ -164,13 +205,7 @@ export default function SingleSession() {
                     </span>
                   </div>
                   <div className="restaurant-links">
-                    <a
-                      href={selectedRestaurant.restaurant.url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Visit Website
-                    </a>
+                    <a onClick={handleConfirmChoice}>Confirm Choice</a>
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${selectedRestaurant.restaurant.coordinates.latitude},${selectedRestaurant.restaurant.coordinates.longitude}`}
                       target="_blank"
@@ -196,9 +231,14 @@ export default function SingleSession() {
                 .map((restaurant) => (
                   <div key={restaurant.id}>
                     <div className="restaurant-details">
-                      <div className="restaurant-image">
-                        <img src={restaurant.image_url} alt={restaurant.name} />
-                      </div>
+                      <a href={restaurant.url} target="_blank" rel="noreferrer">
+                        <div className="restaurant-image">
+                          <img
+                            src={restaurant.image_url}
+                            alt={restaurant.name}
+                          />
+                        </div>
+                      </a>
                       <div className="restaurant-info">
                         <h3>{restaurant.name}</h3>
 
@@ -211,13 +251,7 @@ export default function SingleSession() {
                           </span>
                         </div>
                         <div className="restaurant-links">
-                          <a
-                            href={restaurant.url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            Visit Website
-                          </a>
+                          <a onClick={handleConfirmChoice}>Confirm Choice</a>
                           <a
                             href={`https://www.google.com/maps/search/?api=1&query=${restaurant.coordinates.latitude},${restaurant.coordinates.longitude}`}
                             target="_blank"
@@ -236,6 +270,13 @@ export default function SingleSession() {
           <button onClick={() => setSelectedRestaurant(null)}>Close</button>
         </div>
       )}
+      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)}>
+        <div className="modal-content">
+          <h2>Success!</h2>
+          <p>{`Selected restaurant has been added to ${userName}'s list successfully!`}</p>
+          <button onClick={() => setIsModalOpen(false)}>OK</button>
+        </div>
+      </Modal>
     </div>
   );
 }

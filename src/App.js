@@ -44,8 +44,8 @@ const App = () => {
           <Navbar onLogout={handleLogout} userName={name}/>
           <Routes>
             <Route path="/" element={<Navigate to="/createdate" />} />
-            <Route path="/createdate" element={<CreateDate />} />
-            <Route path="/history" element={<History />} />
+            <Route path="/createdate" element={<CreateDate userName={name}/>} />
+            <Route path="/history" element={<History userName={name}/>} />
           </Routes>
         </>
       ) : (
