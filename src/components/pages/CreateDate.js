@@ -3,15 +3,17 @@ import "./CreateDate.css";
 import Share from "./Share";
 import { addUser } from "./firebase";
 
-export default function CreateDate() {
+export default function CreateDate(props) {
+  const { userName } = props;
   const [restaurants, setRestaurants] = useState([]);
   const [error, setError] = useState(null);
   const [desirabilities, setDesirabilities] = useState({});
-  const [location, setLocation] = useState("")
-  const [showButton, setShowButton] = useState(false)
+  const [location, setLocation] = useState("");
+  const [showButton, setShowButton] = useState(false);
   const [gradientPosition, setGradientPosition] = useState({ x: 50, y: 50 });
   const [showShare, setShowShare] = useState(false);
-  const [sessionID, setSessionID] = useState("")
+  const [sessionID, setSessionID] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleMouseMove = (e) => {
     const { clientX, clientY } = e;
@@ -21,34 +23,41 @@ export default function CreateDate() {
   };
 
   const handleShare = async () => {
-    const newID = await addUser(restaurants,desirabilities);
+    const newID = await addUser(userName, restaurants, desirabilities);
     setSessionID(newID);
     setShowShare(true);
   };
 
   const handleShowRestaurants = async () => {
+    setIsLoading(true);
     desirabilities.length = 0;
     const cuisine1 = document.getElementById("cuisine1").value.toLowerCase();
     const cuisine2 = document.getElementById("cuisine2").value.toLowerCase();
-    setRestaurants([])
-    setShowButton(false)
+    setRestaurants([]);
+    setShowButton(false);
     try {
-        const apiKey =
-          "9SCo-9aeibBhnZOYBoAefUp7cZbBnXAaJ2nfBvLdrJspIhy4Onwv_BQ-me5oJkaVf6I6uHiDD5K1Z-6A3M2cpnIHOLlsuEogaKxCOR7Wgv5NUWD_BYXhZ6aEtLJSZHYx";
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-        const url1 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+","+cuisine2+"&location="+location;
-        
-        //const url2 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+"&location="+location;
-        //const url3 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine2+"&location="+location;
-        
-        const response1 = await fetch(proxyUrl + url1, {
-          headers: {
-            Authorization: `Bearer ${apiKey}`
-          }
-        });
-        const data1 = await response1.json();
-        
-        /*const response2 = await fetch(proxyUrl + url2, {
+      const apiKey =
+        "9SCo-9aeibBhnZOYBoAefUp7cZbBnXAaJ2nfBvLdrJspIhy4Onwv_BQ-me5oJkaVf6I6uHiDD5K1Z-6A3M2cpnIHOLlsuEogaKxCOR7Wgv5NUWD_BYXhZ6aEtLJSZHYx";
+      const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+      const url1 =
+        "https://api.yelp.com/v3/businesses/search?categories=" +
+        cuisine1 +
+        "," +
+        cuisine2 +
+        "&location=" +
+        location;
+
+      //const url2 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine1+"&location="+location;
+      //const url3 = "https://api.yelp.com/v3/businesses/search?categories="+cuisine2+"&location="+location;
+
+      const response1 = await fetch(proxyUrl + url1, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      });
+      const data1 = await response1.json();
+
+      /*const response2 = await fetch(proxyUrl + url2, {
           headers: {
             Authorization: `Bearer ${apiKey}`
           }
@@ -62,11 +71,10 @@ export default function CreateDate() {
         });
         const data3 = await response3.json();*/
 
-        // Filter results to only include restaurants with both cuisine categories
-        const cuisine1and2 = data1.businesses
-        .slice(0, 5);
-          
-            /*const cuisine1Restaurants = data2.businesses
+      // Filter results to only include restaurants with both cuisine categories
+      const cuisine1and2 = data1.businesses.slice(0, 5);
+
+      /*const cuisine1Restaurants = data2.businesses
             .sort((a, b) => b.rating - a.rating)
             .filter(business => !cuisine1and2.includes(business))
             .slice(3, 4);
@@ -79,12 +87,12 @@ export default function CreateDate() {
         setRestaurants([...cuisine1and2, ...cuisine1Restaurants, ...cuisine2Restaurants]);
         console.log("Else c1: ", cuisine1Restaurants);
         console.log("Else c2: ", cuisine2Restaurants);*/
-        setRestaurants([...cuisine1and2])
-        setShowButton(true)
-        setError("")
-        
+      setRestaurants([...cuisine1and2]);
+      setShowButton(true);
+      setError("");
+      setIsLoading(false);
     } catch (err) {
-      setError("Error Loading Restaurants. Enter appropriate cuisines/location!");
+      alert("Error Loading Restaurants. Enter appropriate cuisines/location!");
     }
   };
 
@@ -95,16 +103,15 @@ export default function CreateDate() {
   };
 
   return (
-    <div  onMouseMove={handleMouseMove}>
+    <div onMouseMove={handleMouseMove}>
       <div
-              className="background"
-              style={{
-                background: `linear-gradient(90deg, rgba(24, 136, 255, 0.1) 0%, rgba(24, 136, 255, 0.1) 50%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 100%), radial-gradient(circle at ${gradientPosition.x}% ${gradientPosition.y}%, #1888ff, #000)`,
-              }}
-            ></div>
+        className="background"
+        style={{
+          background: `linear-gradient(90deg, rgba(24, 136, 255, 0.1) 0%, rgba(24, 136, 255, 0.1) 50%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 100%), radial-gradient(circle at ${gradientPosition.x}% ${gradientPosition.y}%, #1888ff, #000)`,
+        }}
+      ></div>
       <div className="create-date">
-      
-        <div className="create-date-container" >
+        <div className="create-date-container">
           <div className="create-date-container-title">Enter your choices</div>
           <div className="create-date-container-inputs">
             <div className="create-date-input-container">
@@ -120,7 +127,8 @@ export default function CreateDate() {
               <label htmlFor="dish1">Location</label>
               <input
                 type="text"
-                value={location} onChange={(e) => setLocation(e.target.value)}
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 placeholder="Enter your location"
               />
             </div>
@@ -144,7 +152,8 @@ export default function CreateDate() {
               <label htmlFor="dish2">Location</label>
               <input
                 type="text"
-                value={location} onChange={(e) => setLocation(e.target.value)}
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 placeholder="Enter your location"
               />
             </div>
@@ -152,20 +161,36 @@ export default function CreateDate() {
         </div>
       </div>
       <div className="create-btn-container">
-              <button className="create-btn" onClick={handleShowRestaurants}>
-                Show Restaurants
-              </button>
-            </div>
+        <button className="create-btn" onClick={handleShowRestaurants}>
+          Show Restaurants
+        </button>
+      </div>
       {error && <p>{error}</p>}
+      {isLoading ? (
+        <div className="loading-spinner-container">
+          <div className="loading-spinner"></div>
+          <div className="loading-text">Loading...</div>
+        </div>
+      ) : (
+        <div></div>
+      )}
+
       {restaurants.length > 0 && (
         <div className="restaurants-container">
-          <h2>Available Restaurants</h2>
+          <h2>Top Restaurants</h2>
           <ul className="all-restaurants">
             {restaurants.map((restaurant) => (
               <li key={restaurant.id} className="restaurant-container">
-                <div className="image-container">
-                  <img src={restaurant.image_url} alt={restaurant.name} />
-                </div>
+                <a
+                  href={"https://www.yelp.com/biz/" + restaurant.alias}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div className="image-container">
+                    <img src={restaurant.image_url} alt={restaurant.name} />
+                  </div>
+                </a>
+
                 <div className="restaurant-details">
                   <h3>{restaurant.name}</h3>
                   <p>
@@ -185,10 +210,19 @@ export default function CreateDate() {
                   <p>
                     <strong>Reviews:</strong> {restaurant.review_count}
                   </p>
-                  <p>
-                    <strong>Website:</strong>  <div className="generated-link"><a href={"https://www.yelp.com/biz/" + restaurant.alias} target="_blank" rel="noreferrer">{"https://www.yelp.com/biz/" + restaurant.alias}</a></div>
-                  </p>
-                  
+                  {/* <p>
+                    <strong>Website:</strong>{" "}
+                    <div className="generated-link">
+                      <a
+                        href={"https://www.yelp.com/biz/" + restaurant.alias}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {"https://www.yelp.com/biz/" + restaurant.alias}
+                      </a>
+                    </div>
+                  </p> */}
+
                   <div className="desirability-container">
                     <p>How badly do you want to eat here?</p>
                     <div className="desirability-buttons">
@@ -209,20 +243,22 @@ export default function CreateDate() {
                       ))}
                     </div>
                   </div>
-                  
                 </div>
-                
               </li>
             ))}
-            {showButton && <div className="create-btn-container">
-              <button className="create-btn" onClick={() => handleShare()}>
-                Share
-              </button>
-            </div>}
+            {showButton && (
+              <div className="create-btn-container">
+                <button className="create-btn" onClick={() => handleShare()}>
+                  Share With Partner
+                </button>
+              </div>
+            )}
           </ul>
         </div>
       )}
-      {showShare && <Share setShowShare={setShowShare} linkID={sessionID} />}
+      {showShare && (
+        <Share setShowShare={setShowShare} linkID={parseInt(sessionID) + 1} />
+      )}
     </div>
   );
 }
