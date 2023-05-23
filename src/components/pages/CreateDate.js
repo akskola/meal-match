@@ -38,7 +38,7 @@ export default function CreateDate(props) {
     try {
       const apiKey =
         "9SCo-9aeibBhnZOYBoAefUp7cZbBnXAaJ2nfBvLdrJspIhy4Onwv_BQ-me5oJkaVf6I6uHiDD5K1Z-6A3M2cpnIHOLlsuEogaKxCOR7Wgv5NUWD_BYXhZ6aEtLJSZHYx";
-      const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+      const proxyUrl = "https://corsproxy.io/?";
       const url1 =
         "https://api.yelp.com/v3/businesses/search?categories=" +
         cuisine1 +
@@ -97,7 +97,6 @@ export default function CreateDate(props) {
   };
 
   const handleDesirability = (id, desirability) => {
-    // handleRateDesirability(id, desirability);
     setDesirabilities({ ...desirabilities, [id]: desirability });
     console.log(desirabilities);
   };

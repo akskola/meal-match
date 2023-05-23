@@ -38,7 +38,8 @@ export default function History(props) {
   }, []);
 
   return (
-    <div onMouseMove={handleMouseMove}>
+    <div clasName="history-container" onMouseMove={handleMouseMove}>
+      <p className="info-text history">Track your MealMatches here:</p>
       <div
         className="background"
         style={{

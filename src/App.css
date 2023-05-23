@@ -2,7 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'PT Sans', sans-serif;
+  font-family: "PT Sans", sans-serif;
 }
 
 .home-container {
@@ -39,7 +39,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'PT Sans', sans-serif;
+  font-family: "PT Sans", sans-serif;
 }
 
 .login-button {
@@ -52,7 +52,6 @@
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
 }
-
 
 .login-button:hover {
   background-color: #0062cc;
@@ -72,6 +71,7 @@
 
 .login-screen {
   display: flex;
+  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   height: 80vh;
@@ -84,6 +84,44 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+.create-date-container.app {
+  max-width: 600px;
+  margin: 100px;
+}
+
+.info-text {
+  font-size: 24px;
+  color: #ffffff;
+  background-color: #252525;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 45%;
+  max-width: 600px;
+  margin: 100px;
+}
+
+/* .info-text:hover {
+  animation-name: reduceMargin;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+} */
+
+.inner-text {
+  margin-top: 30px;
+  font-size: 16px;
+}
+
+/* @keyframes reduceMargin {
+  from {
+    margin-top: 250px;
+  }
+  to {
+    margin-top: 120px;
+  }
+} */
 
 .content {
   z-index: 1;

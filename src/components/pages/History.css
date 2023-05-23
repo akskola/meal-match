@@ -1,3 +1,17 @@
+.history-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-text.history {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  max-width: none;
+  margin-bottom: 0px;
+}
+
 .restaurant-links-dir {
   display: flex;
   justify-content: right;
