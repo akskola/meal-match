@@ -19,4 +19,4 @@ React and Firebase
 ### Contributers:
 Akshay Reddy Kola, Anish Nahar
 
-This project was developed as a submission in the Lighthall Software Engineering Super League 1 - Level 4.
+This project was made as a submission in the Lighthall Software Engineering Super League 1 - Level 4.
